@@ -14,4 +14,6 @@ router.post('/:id/approve', formController.approveForm);
 router.post('/:id/reject', formController.rejectForm);
 router.post('/:id/reject', formController.rejectForm);
 router.get('/rejected', formController.getRejectedForms);
+router.get('/user/:userId', formController.getUserForms);
+
 module.exports = router;

@@ -91,3 +91,19 @@ exports.getRejectedForms = async (req, res) => {
         res.status(500).send({ error: 'Error fetching rejected forms', details: error.message });
     }
 };
+
+// controllers/formController.js
+exports.getUserForms = async (req, res) => {
+    try {
+        const email = req.params.email;
+        const formsSnapshot = await getDocs(query(collection(db, 'forms'), where('email', '==', email)));
+        const forms = formsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        res.status(200).send(forms);
+    } catch (error) {
+        res.status(500).send({ error: 'Error fetching user forms', details: error.message });
+    }
+};
+

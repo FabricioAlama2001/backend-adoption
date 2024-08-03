@@ -29,6 +29,7 @@ const createForm = async (formData) => {
     const login = new Login(newFormRef.id, formData.email, formData.password, 'client');
     await setDoc(loginRef, { email: login.email, password: login.password, role: login.role });
 
+
     await sendEmail(formData.email, 'Formulario de Adopción Recibido', 'formulario-recibido', {
         name: formData.name,
         lastName: formData.lastName,
