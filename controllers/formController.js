@@ -1,0 +1,93 @@
+const formService = require('../services/formService');
+
+exports.createForm = async (req, res) => {
+    try {
+        const formData = req.body;
+        const newForm = await formService.createForm(formData);
+        res.status(201).send(newForm);
+    } catch (error) {
+        if (error.message === 'Email already exists') {
+            res.status(400).send({ error: 'Email already exists' });
+        } else {
+            res.status(500).send({ error: 'Error creating form', details: error.message });
+        }
+    }
+};
+
+exports.getAllForms = async (req, res) => {
+    try {
+        const forms = await formService.getAllForms();
+        res.status(200).send(forms);
+    } catch (error) {
+        res.status(500).send({ error: 'Error fetching forms', details: error.message });
+    }
+};
+
+exports.getFormsSummary = async (req, res) => {
+    try {
+        const formsSummary = await formService.getFormsSummary();
+        res.status(200).send(formsSummary);
+    } catch (error) {
+        res.status(500).send({ error: 'Error fetching forms summary', details: error.message });
+    }
+};
+
+exports.getFormById = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const form = await formService.getFormById(formId);
+        res.status(200).send(form);
+    } catch (error) {
+        res.status(404).send({ error: 'Form not found', details: error.message });
+    }
+};
+
+exports.updateForm = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const formData = req.body;
+        const updatedForm = await formService.updateForm(formId, formData);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({ error: 'Error updating form', details: error.message });
+    }
+};
+
+exports.deleteForm = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        await formService.deleteForm(formId);
+        res.status(200).send({ id: formId });
+    } catch (error) {
+        res.status(500).send({ error: 'Error deleting form', details: error.message });
+    }
+};
+
+exports.approveForm = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const updatedForm = await formService.approveForm(formId);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({ error: 'Error approving form', details: error.message });
+    }
+};
+
+exports.rejectForm = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const updatedForm = await formService.rejectForm(formId);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({ error: 'Error rejecting form', details: error.message });
+    }
+};
+
+exports.getRejectedForms = async (req, res) => {
+    try {
+        const rejectedForms = await formService.getRejectedForms();
+        res.status(200).send(rejectedForms);
+    } catch (error) {
+        res.status(500).send({ error: 'Error fetching rejected forms', details: error.message });
+    }
+};
