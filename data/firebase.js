@@ -4,7 +4,7 @@ const { getFirestore } = require('firebase/firestore');
 
 // Configuración de Firebase copiada de la consola
 const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
+    apiKey: "AIzaSyCg0dftt8_wcFpe6-Ze1L0pvjluwwBqPkQ",
     authDomain: "adoption-f26a1.firebaseapp.com",
     projectId: "adoption-f26a1",
     storageBucket: "adoption-f26a1.appspot.com",
