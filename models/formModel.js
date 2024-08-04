@@ -29,7 +29,7 @@ class Form {
                     previousPets,
                     previousPetsDetails = '',
                     currentPets = 0,
-                    currentPetDetails,
+                    currentPetDetails ='no tiene',
                     petsNeutered = 0,
                     petsVaccinated = 'no',
                     financialAbility,

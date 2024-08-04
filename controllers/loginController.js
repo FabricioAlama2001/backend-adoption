@@ -19,6 +19,7 @@ exports.createLogin = async (req, res) => {
     res.status(201).send({login});
 }
 exports.getFormByEmail = async (req, res) => {
+
     try {
         const {email} = req.body;
 

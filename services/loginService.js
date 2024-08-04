@@ -18,7 +18,12 @@ const getLoginByEmail = async (email, password) => {
 
     const docSnap = querySnapshotLogins.docs[0];
 
-    return new Login(docSnap.id, docSnap.data().email, docSnap.data().password, docSnap.data().role);
+    return new Login({
+        id: docSnap.id,
+        email: docSnap.data().email,
+        password: docSnap.data().password,
+        role: docSnap.data().role
+    });
 };
 
 const createLogin = async (name, email, password, role) => {

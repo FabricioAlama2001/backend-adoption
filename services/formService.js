@@ -101,6 +101,22 @@ const approveForm = async (id) => {
 
     return new Form(updatedDoc.id, ...Object.values(data));
 };
+const approveComp= async (id) => {
+    const formRef = doc(db, 'forms', id);
+    await updateDoc(formRef, {estadoValidacionComprovante: 'approved'});
+
+    const updatedDoc = await getDoc(formRef);
+    const data = updatedDoc.data();
+
+    await sendEmail(data.email, 'Comprobante Aceptado', 'pago-aprovado', {
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email
+    });
+
+    return new Form(updatedDoc.id, ...Object.values(data));
+};
+
 
 const rejectForm = async (id) => {
     const formRef = doc(db, 'forms', id);
@@ -114,6 +130,23 @@ const rejectForm = async (id) => {
         lastName: data.lastName,
         email: data.email
     });
+
+    return new Form(updatedDoc.id, ...Object.values(data));
+};
+
+const rejectComp = async (id) => {
+    const formRef = doc(db, 'forms', id);
+    await updateDoc(formRef, {estadoValidacionComprobante: 'rejected'});
+
+    const updatedDoc = await getDoc(formRef);
+    const data = updatedDoc.data();
+
+    await sendEmail(data.email, 'Comprobante Rechazado', 'Rechazado-denegado', {
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email
+    });
+
 
     return new Form(updatedDoc.id, ...Object.values(data));
 };
