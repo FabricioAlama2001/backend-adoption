@@ -1,4 +1,4 @@
-const { collection, doc, setDoc, getDocs, getDoc, query, where, updateDoc, deleteDoc } = require('firebase/firestore');
+const {collection, doc, setDoc, getDocs, getDoc, query, where, updateDoc, deleteDoc} = require('firebase/firestore');
 const db = require('../data/firebase');
 const Form = require('../models/formModel');
 const Login = require('../models/loginModel');
@@ -22,12 +22,20 @@ const createForm = async (formData) => {
     }
 
     const newFormRef = doc(collection(db, 'forms'));
-    const form = new Form(newFormRef.id, ...Object.values(formData));
-    await setDoc(newFormRef, { ...formData });
+    const form = new Form(
+        {id: newFormRef.id, ...formData});
+
+    await setDoc(newFormRef, {...form});
 
     const loginRef = doc(collection(db, 'logins'), newFormRef.id);
-    const login = new Login(newFormRef.id, formData.email, formData.password, 'client');
-    await setDoc(loginRef, { email: login.email, password: login.password, role: login.role });
+    const login = new Login({
+        id: newFormRef.id,
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: 'client'
+    });
+    await setDoc(loginRef, {name: login.name, email: login.email, password: login.password, role: login.role});
 
 
     await sendEmail(formData.email, 'Formulario de Adopción Recibido', 'formulario-recibido', {
@@ -47,26 +55,11 @@ const createForm = async (formData) => {
 
 const getAllForms = async () => {
     const formsSnapshot = await getDocs(collection(db, 'forms'));
-    const forms = formsSnapshot.docs.map(doc => ({
+
+    return formsSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
     }));
-    return forms;
-};
-
-const getFormsSummary = async () => {
-    const formsSnapshot = await getDocs(collection(db, 'forms'));
-    const formsSummary = formsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        dni: doc.data().dni,
-        name: doc.data().name,
-        lastName: doc.data().lastName,
-        email: doc.data().email,
-        phoneNumber: doc.data().phoneNumber,
-        address: doc.data().address,
-        estadoValidacionFormulario: doc.data().estadoValidacionFormulario,
-    }));
-    return formsSummary.filter(form => form.estadoValidacionFormulario === 'pending');
 };
 
 const getFormById = async (id) => {
@@ -81,7 +74,7 @@ const getFormById = async (id) => {
 
 const updateForm = async (id, formData) => {
     const formRef = doc(db, 'forms', id);
-    await updateDoc(formRef, { ...formData });
+    await updateDoc(formRef, {...formData});
     const updatedDoc = await getDoc(formRef);
     const data = updatedDoc.data();
     return new Form(updatedDoc.id, ...Object.values(data));
@@ -90,12 +83,12 @@ const updateForm = async (id, formData) => {
 const deleteForm = async (id) => {
     const formRef = doc(db, 'forms', id);
     await deleteDoc(formRef);
-    return { id };
+    return {id};
 };
 
 const approveForm = async (id) => {
     const formRef = doc(db, 'forms', id);
-    await updateDoc(formRef, { estadoValidacionFormulario: 'approved' });
+    await updateDoc(formRef, {estadoValidacionFormulario: 'approved'});
 
     const updatedDoc = await getDoc(formRef);
     const data = updatedDoc.data();
@@ -111,7 +104,7 @@ const approveForm = async (id) => {
 
 const rejectForm = async (id) => {
     const formRef = doc(db, 'forms', id);
-    await updateDoc(formRef, { estadoValidacionFormulario: 'rejected' });
+    await updateDoc(formRef, {estadoValidacionFormulario: 'rejected'});
 
     const updatedDoc = await getDoc(formRef);
     const data = updatedDoc.data();
@@ -125,19 +118,9 @@ const rejectForm = async (id) => {
     return new Form(updatedDoc.id, ...Object.values(data));
 };
 
-const getRejectedForms = async () => {
-    const formsSnapshot = await getDocs(collection(db, 'forms'));
-    const formsSummary = formsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        dni: doc.data().dni,
-        name: doc.data().name,
-        lastName: doc.data().lastName,
-        email: doc.data().email,
-        phoneNumber: doc.data().phoneNumber,
-        address: doc.data().address,
-        estadoValidacionFormulario: doc.data().estadoValidacionFormulario,
-    }));
-    return formsSummary.filter(form => form.estadoValidacionFormulario === 'rejected');
+const uploadPayment = async (id, file) => {
+    const formRef = doc(db, 'forms', id);
+    return await updateDoc(formRef, {urlPayment: `${file.destination}/${file.filename}`});
 };
 
 module.exports = {
@@ -149,6 +132,5 @@ module.exports = {
     getFormByEmail,
     approveForm,
     rejectForm,
-    getFormsSummary,
-    getRejectedForms
+    uploadPayment
 };
