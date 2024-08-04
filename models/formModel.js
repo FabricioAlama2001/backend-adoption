@@ -26,7 +26,7 @@ class Form {
                     fence='no',
                     petType,
                     reason,
-                    previousPets,
+                    previousPets ='no',
                     previousPetsDetails = '',
                     currentPets = 0,
                     currentPetDetails ='no tiene',
