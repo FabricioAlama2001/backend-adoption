@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const formController = require('../controllers/formController');
 
-router.post('/', formController.createForm);
+router.post('/createForm', formController.createForm);
 router.get('/', formController.getAllForms);
 router.get('/summary', formController.getFormsSummary);
 router.get('/rejected', formController.getRejectedForms);
