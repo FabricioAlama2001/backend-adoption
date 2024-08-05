@@ -103,12 +103,12 @@ const approveForm = async (id) => {
 };
 const approveComp= async (id) => {
     const formRef = doc(db, 'forms', id);
-    await updateDoc(formRef, {estadoValidacionComprovante: 'approved'});
+    await updateDoc(formRef, {estadoValidacionPago: 'approved'});
 
     const updatedDoc = await getDoc(formRef);
     const data = updatedDoc.data();
 
-    await sendEmail(data.email, 'Comprobante Aceptado', 'pago-aprovado', {
+    await sendEmail(data.email, 'Comprobante Aceptado', 'pago-aprobado', {
         name: data.name,
         lastName: data.lastName,
         email: data.email
@@ -136,12 +136,12 @@ const rejectForm = async (id) => {
 
 const rejectComp = async (id) => {
     const formRef = doc(db, 'forms', id);
-    await updateDoc(formRef, {estadoValidacionComprobante: 'rejected'});
+    await updateDoc(formRef, {estadoValidacionPago: 'rejected'});
 
     const updatedDoc = await getDoc(formRef);
     const data = updatedDoc.data();
 
-    await sendEmail(data.email, 'Comprobante Rechazado', 'Rechazado-denegado', {
+    await sendEmail(data.email, 'Comprobante Rechazado', 'pago-denegado', {
         name: data.name,
         lastName: data.lastName,
         email: data.email
@@ -153,7 +153,7 @@ const rejectComp = async (id) => {
 
 const uploadPayment = async (id, file) => {
     const formRef = doc(db, 'forms', id);
-    return await updateDoc(formRef, {urlPayment: `${file.destination}/${file.filename}`});
+    return await updateDoc(formRef, {urlPayment: `uploads/payments/${file.filename}`});
 };
 
 module.exports = {
@@ -165,5 +165,7 @@ module.exports = {
     getFormByEmail,
     approveForm,
     rejectForm,
+    rejectComp,
+    approveComp,
     uploadPayment
 };

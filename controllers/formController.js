@@ -98,6 +98,44 @@ exports.uploadPayment = async (req, res) => {
         res.status(500).send({error: 'Error fetching forms', details: error.message});
     }
 };
+exports.approveForm = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const updatedForm = await formService.approveForm(formId);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({error: 'Error approving form', details: error.message});
+    }
+};
+
+exports.rejectForm = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const updatedForm = await formService.rejectForm(formId);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({error: 'Error rejecting form', details: error.message});
+    }
+};
+exports.approveComp = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const updatedForm = await formService.approveComp(formId);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({error: 'Error approving form', details: error.message});
+    }
+};
+
+exports.rejectComp = async (req, res) => {
+    try {
+        const formId = req.params.id;
+        const updatedForm = await formService.rejectComp(formId);
+        res.status(200).send(updatedForm);
+    } catch (error) {
+        res.status(500).send({error: 'Error rejecting form', details: error.message});
+    }
+};
 
 
 

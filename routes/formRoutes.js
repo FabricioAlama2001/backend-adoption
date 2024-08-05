@@ -34,6 +34,8 @@ router.post('/:id/approve', formController.approveForm);
 router.post('/:id/reject', formController.rejectForm);
 router.post('/:id/reject', formController.rejectForm);
 router.get('/user/:userId', formController.getUserForms);
+router.post('/:id/reject-comp', formController.rejectComp);
+router.post('/:id/approve-comp', formController.approveComp);
 router.post('/:id/upload-payment',upload.single('file'), formController.uploadPayment);
 
 module.exports = router;
