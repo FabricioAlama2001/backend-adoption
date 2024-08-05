@@ -14,7 +14,7 @@ app.use('/api/forms', formRoutes);
 app.use('/api', loginRoutes);
 app.use(express.static(path.join(process.cwd(), 'assets')));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
